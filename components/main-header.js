@@ -2,12 +2,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import classes from './header.module.css';
-import logo from '@/assets/logo.png';
+import classes from './main-header.module.css';
+import logo from '@/assets/icon.png';
 
 
 
-export default function Header() {
+export default function MainHeader() {
   return (
     <>
       <header className={classes.header}>
