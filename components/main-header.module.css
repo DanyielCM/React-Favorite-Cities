@@ -23,23 +23,24 @@
   
   .nav a {
     text-decoration: none;
-    color: #ddd6cb;
+    color: #629584;
     font-weight: bold;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
+    filter: drop-shadow(0 0 0.75rem rgba(200, 223, 204, 0.8));
   }
   
   .nav a:hover,
   .nav a:active {
-    background: linear-gradient(90deg, #ff8a05, #f9b331);
+    background: linear-gradient(90deg, #243642, #387478);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 18px rgba(248, 190, 42, 0.8);
+    filter: drop-shadow(0 0 0.75rem rgba(200, 223, 204, 0.8));
   }
   
   .active {
-    background: linear-gradient(90deg, #ff8a05, #f9b331);
+    background: linear-gradient(90deg, #243642, #387478);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -60,6 +61,6 @@
     width: 5rem;
     height: 5rem;
     object-fit: contain;
-    filter: drop-shadow(0 0 0.75rem rgba(248, 190, 42, 0.8));
+    filter: drop-shadow(0 0 0.75rem rgba(200, 223, 204, 0.8));
   }
   
