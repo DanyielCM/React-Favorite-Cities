@@ -1,13 +1,13 @@
-
 import Link from 'next/link';
 import Image from 'next/image';
 
 import classes from './main-header.module.css';
 import logo from '@/assets/icon.png';
+import { auth } from '@/configurations/auth';
 
+export default async function MainHeader() {
+  const session = await auth();
 
-
-export default function MainHeader() {
   return (
     <>
       <header className={classes.header}>
@@ -26,10 +26,23 @@ export default function MainHeader() {
               <Link href='/explore'>Explore</Link>
             </li>
             <li>
-              <Link href='/city-page'>City Page</Link>
+              <Link href='/favorites'>Favorites</Link>
             </li>
             <li>
-              <Link href='/favorites'>Favorites</Link>
+              <Link href='/account'>Account</Link>
+            </li>
+            <li>
+              {session?.user && (
+                <div className={classes.imageContainer}>
+                  <Image
+                    src={session?.user?.image}
+                    alt={session?.user?.name}
+                    width={50}
+                    height={50}
+                    className={classes.profileImage}
+                  ></Image>
+                </div>
+              )}
             </li>
           </ul>
         </nav>

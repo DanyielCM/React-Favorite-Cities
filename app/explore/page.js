@@ -4,6 +4,7 @@ import CityCard from '@/components/city-card';
 import { useInput } from '@/hooks/useInput';
 import classes from './page.module.css';
 import { useRef } from 'react';
+import Button from '@/UI/button';
 
 export default function Explore() {
   const cityCardRef = useRef(null);
@@ -40,13 +41,13 @@ export default function Explore() {
             onBlur={handleInputBlur}
             onChange={handleInputChange}
           />
-          <button
+          <Button
             onClick={() => cityCardRef.current?.fetchCityInfo(cityNameValue)}
             disabled={hasError}
             className={classes.searchButton}
           >
             Search City Info
-          </button>
+          </Button>
         </div>
         <div className={classes.error}>
           {hasError && <p>Please enter a valid input.</p>}
