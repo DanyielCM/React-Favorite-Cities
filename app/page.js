@@ -1,66 +1,63 @@
-'use client';
-
-import React, { useEffect, useRef } from 'react';
-import CityCard from '@/components/city-card';
+import FavoriteCities from '@/components/favorite-cities';
+import RandomCities from '@/components/random-cities';
+import { auth } from '@/configurations/auth';
 import classes from './page.module.css';
+import Explore from './explore/page';
 
-export default function Home() {
-  const cityCardRefs = useRef([]);
+export default async function Home() {
+  const session = await auth();
+  let favoriteCities = [];
 
-  const predefinedCities = [
-    'New York',
-    'Milan',
-    'Paris',
-    'Sydney',
-    'Cape Town',
-    'London',
-    'Dubai',
-    'Singapore',
-    'Rome',
-    'Bangkok',
-    'Los Angeles',
-    'San Francisco',
-    'Hong Kong',
-    'Istanbul',
-    'Barcelona',
-    'Berlin',
-    'Amsterdam',
-    'Moscow',
-    'Shanghai',
-    'Mumbai',
-    'Toronto',
-    'Bucharest',
-    'Rio de Janeiro',
-    'Buenos Aires',
-    'Chicago',
-    'Mexico City',
-    'Vienna',
-    'Cairo',
-    'Beijing',
-    'Melbourne',
-  ];
+  async function fetchLocationData() {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/users/favorites?email=${encodeURIComponent(
+          session?.user?.email
+        )}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-  const getRandomCities = (count) => {
-    return predefinedCities.sort(() => Math.random() - 0.5).slice(0, count);
-  };
+      if (!response.ok) {
+        console.error('Failed to get data:', await response.text());
+      } else {
+        console.log('Data get successfully');
+        return response.json();
+      }
+    } catch (error) {
+      console.error('Error during fetch:', error);
+    }
+  }
 
-  useEffect(() => {
-    const randomCities = getRandomCities(5);
-    randomCities.forEach((city, index) => {
-      cityCardRefs.current[index]?.fetchCityInfo(city);
-    });
-  }, []);
+  if (session?.user) {
+    const locations = await fetchLocationData();
+    if (locations) {
+      console.log('User data found:', locations);
+      locations.forEach((location) => {
+        favoriteCities.push(location);
+      });
+    } else {
+      console.log('Custom message');
+    }
+  } else {
+    console.log('Custom message');
+  }
 
   return (
-    <div className={classes.popularPlaces}>
-      <h2 className={classes.title}>Discover popular places</h2>
-      <div className={classes.cards}>
-        {predefinedCities.map((city, index) => (
-          <div key={index} className={classes.cardContainer}>
-            <CityCard ref={(el) => (cityCardRefs.current[index] = el)} />
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      <Explore></Explore>
+      <RandomCities
+        favoriteCities={favoriteCities}
+        session={session}
+      ></RandomCities>
+      <FavoriteCities
+        favoriteCities={favoriteCities}
+        session={session}
+      ></FavoriteCities>
+    </>
   );
 }

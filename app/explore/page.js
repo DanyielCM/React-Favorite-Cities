@@ -1,59 +1,54 @@
-'use client';
 
-import CityCard from '@/components/city-card';
-import { useInput } from '@/hooks/useInput';
+import ExploreCities from '@/components/explore-cities';
 import classes from './page.module.css';
-import { useRef } from 'react';
-import Button from '@/UI/button';
+import { auth } from '@/configurations/auth';
 
-export default function Explore() {
-  const cityCardRef = useRef(null);
+export default async function Explore() {
+  const session = await auth();
+  let favoriteCities = [];
 
-  const {
-    value: cityNameValue,
-    handleInputChange,
-    handleInputBlur,
-    hasError,
-  } = useInput('', (value) => isNotEmpty(value));
+  async function fetchLocationData() {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/users/favorites?email=${encodeURIComponent(
+          session?.user?.email
+        )}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-  function isNotEmpty(value) {
-    return value.trim() !== '';
+      if (!response.ok) {
+        console.error('Failed to get data:', await response.text());
+      } else {
+        console.log('Data get successfully');
+        return response.json();
+      }
+    } catch (error) {
+      console.error('Error during fetch:', error);
+    }
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    if (hasError) {
-      return;
-    }
+  if (session?.user) {
+    const locations = await fetchLocationData();
+      if (locations) {
+        console.log('User data found:', locations);
+        locations.forEach((location) => {
+          favoriteCities.push(location);
+        });
+      } else {
+        console.log('Custom message');
+      }
+  } else {
+    console.log('Custom message');
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <label htmlFor='city-name'>Search your dream city</label>
-        <div className={classes.formRow}>
-          <input
-            id='city-name'
-            type='text'
-            name='city-name'
-            value={cityNameValue}
-            onBlur={handleInputBlur}
-            onChange={handleInputChange}
-          />
-          <Button
-            onClick={() => cityCardRef.current?.fetchCityInfo(cityNameValue)}
-            disabled={hasError}
-            className={classes.searchButton}
-          >
-            Search City Info
-          </Button>
-        </div>
-        <div className={classes.error}>
-          {hasError && <p>Please enter a valid input.</p>}
-        </div>
-      </form>
-      <CityCard ref={cityCardRef} />
+      <ExploreCities  favoriteCities={favoriteCities} session={session}></ExploreCities>
     </>
   );
 }

@@ -40,14 +40,14 @@ export default async function Account() {
         body: JSON.stringify({
           email: session?.user?.email,
           name: session?.user?.name,
-          locations: ['roma', 'cluj'],
+          locations: [],
         }),
       });
 
       if (!response.ok) {
-        console.error('Failed to send data:', await response.text());
+        console.error('Failed to save new user:', await response.text());
       } else {
-        console.log('Data sent successfully');
+        console.log('Successfully saved new user');
       }
     } catch (error) {
       console.error('Error during fetch:', error);
@@ -57,7 +57,7 @@ export default async function Account() {
   if (session?.user) {
     fetchUserData().then((user) => {
       if (user) {
-        console.log('Fetched user data:', user);
+        console.log('User data found:', user);
       } else {
         console.log('No user data found');
         saveUserData();
@@ -68,16 +68,19 @@ export default async function Account() {
   return (
     <>
       <div className={classes.container}>
-        <form
-          action={async () => {
-            'use server';
-            await signIn('google');
-          }}
-        >
-          <button type='submit' className={classes.google_button}>
-            Sign In with Google
-          </button>
-        </form>
+        {!session?.user && (
+          <form
+            action={async () => {
+              'use server';
+              await signIn('google');
+            }}
+          >
+            <button type='submit' className={classes.google_button}>
+              Sign In with Google
+            </button>
+          </form>
+        )}
+
         {session?.user && (
           <>
             <h1>Logged-In User:</h1>

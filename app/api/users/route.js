@@ -17,9 +17,6 @@ export async function GET(request) {
   const user = await userRepo.findOneBy({
     email
   });
-  if (!user) {
-    return NextResponse.json(undefined);
-  }
   return NextResponse.json(user);
 }
 
@@ -29,11 +26,17 @@ export async function POST(request) {
   const userRepo = AppDataSource.getRepository(User);
   const locationRepo = AppDataSource.getRepository(Location);
   const obj_locations = [];
-  locations.forEach(locationName => {
-    obj_locations.push(locationRepo.create({ name: locationName }));
-  });
-  await locationRepo.save(obj_locations);
-  const user = userRepo.create({ email, name, locations: obj_locations, });
+  for (const locationName of locations) {
+    let location = await locationRepo.findOneBy({ name: locationName });
+
+    if (!location) {
+      // If location doesn't exist, create it
+      location = locationRepo.create({ name: locationName });
+      await locationRepo.save(location);
+    }
+    obj_locations.push(location);
+  }
+  const user = userRepo.create({ email, name, favoriteLocations: obj_locations, });
   await userRepo.save(user);
 
   return NextResponse.json({ message: "User created", user });

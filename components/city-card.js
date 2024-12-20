@@ -2,15 +2,29 @@
 
 import Image from 'next/image';
 import classes from './city-card.module.css';
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateDistance } from '@/utils/distance-calc';
 import Modal from './modal';
 import Button from '@/UI/button';
 
-const CityCard = React.forwardRef((props, ref) => {
+const CityCard = React.forwardRef((params, ref) => {
   const [cityInfo, setCityInfo] = useState(null);
   const [cityDistance, setCityDistance] = useState('');
   const [userProgress, setUserProgress] = useState('');
+  const [onFavoriteList, setOnFavoriteList] = useState(false);
+
+  let session = params.session;
+  let favoriteCities = params.favoriteCities;
+
+  useEffect(() => {
+    if (cityInfo) {
+      favoriteCities.forEach((favoriteCity) => {
+        if (cityInfo.name === favoriteCity) {
+          setOnFavoriteList(true);
+        }
+      });
+    }
+  }, [cityInfo, favoriteCities]);
 
   function handleShowModal() {
     setUserProgress('modal');
@@ -37,7 +51,11 @@ const CityCard = React.forwardRef((props, ref) => {
   const fetchCityInfo = async (cityName) => {
     try {
       const response = await fetch(
-        `/api/cities?city=${encodeURIComponent(cityName)}`
+        `http://localhost:3000/api/cities?city=${encodeURIComponent(cityName)}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }
       );
       if (!response.ok) {
         throw new Error(`HTTP Error: ${response.status}`);
@@ -52,6 +70,57 @@ const CityCard = React.forwardRef((props, ref) => {
   React.useImperativeHandle(ref, () => ({
     fetchCityInfo,
   }));
+
+  const addLocation = async (locationName) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/users/favorites`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: session?.user?.email,
+            location: locationName,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      setOnFavoriteList(true);
+      console.log(response.json());
+    } catch (error) {
+      console.error('Error fetching city info:', error);
+    }
+  };
+
+  const deleteLocation = async (locationName) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/users/favorites`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: session?.user?.email,
+            location: locationName,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      setOnFavoriteList(false);
+
+      console.log(response.json());
+    } catch (error) {
+      console.error('Error fetching city info:', error);
+    }
+  };
 
   return (
     <>
@@ -71,7 +140,24 @@ const CityCard = React.forwardRef((props, ref) => {
                     className={classes.image}
                   />
                 ))}
-                <h2>{cityInfo.name}</h2>
+                <div className={classes.headerRow}>
+                  <h2>{cityInfo.name}</h2>
+                  {session && (
+                    <div className={classes.buttonsRow}>
+                      {!onFavoriteList && (
+                        <button className={classes.toggleButton} onClick={() => addLocation(cityInfo.name)}>
+                          ☆
+                        </button>
+                      )}
+
+                      {onFavoriteList && (
+                        <button className={classes.toggleButton}  onClick={() => deleteLocation(cityInfo.name)}>
+                          ★
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className={classes.front}>
                 <div className={classes.textCtr}>

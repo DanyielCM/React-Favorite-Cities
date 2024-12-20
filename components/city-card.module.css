@@ -33,21 +33,47 @@
 }
 
 .background {
-    display: flex;
-    justify-content: center;
-    position: absolute;
     height: 100%;
     width: 100%;
     background-color: #253c3c;
 }
 
 .background h2 {
-    margin-left: -6rem;
-    margin-top: 1rem;
+    max-width: 10rem;
+    margin-right: 2rem;
     letter-spacing: 2px;
     color: #E2F1E7;
     z-index: 10;
     transition: 1s;
+}
+
+.background button {
+    height: 2rem;
+    width: 2rem;
+    color: #E2F1E7;
+    z-index: 10;
+    transition: 1s;
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 1rem;
+}
+
+.buttonsRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+
 }
 
 .image {
