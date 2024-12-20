@@ -1,0 +1,28 @@
+.title {
+    padding: 1rem 3rem;
+    color: #243642;
+  }
+  
+  .cards {
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+  }
+  
+  .container {
+    color: #629584;
+    padding: 1rem 3rem 0;
+  }
+  
+  .container a {
+    color: #253c3c;
+  }
+  
+  .container a:hover, .container a:active {
+    background: linear-gradient(90deg, #243642, #387478);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 0.75rem rgba(200, 223, 204, 0.8));
+  }
+  

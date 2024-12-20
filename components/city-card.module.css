@@ -1,0 +1,170 @@
+/* .container {
+    width: 90%;
+    max-width: 38rem;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: linear-gradient(180deg, #629584, #A2C1B7);
+    border-radius: 8px;
+    box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
+} */
+
+/* Card */
+
+.container {
+    margin: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    height: 450px;
+    width: 300px;
+    max-width: 38rem;
+    overflow: hidden;
+    position: relative;
+    border-radius: 15px;
+    transition: 1s;
+    cursor: pointer;
+}
+
+.card:hover {
+    box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
+}
+
+.background {
+    height: 100%;
+    width: 100%;
+    background-color: #253c3c;
+}
+
+.background h2 {
+    max-width: 10rem;
+    margin-right: 2rem;
+    letter-spacing: 2px;
+    color: #E2F1E7;
+    z-index: 10;
+    transition: 1s;
+}
+
+.background button {
+    height: 2rem;
+    width: 2rem;
+    color: #E2F1E7;
+    z-index: 10;
+    transition: 1s;
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 1rem;
+}
+
+.buttonsRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+
+}
+
+.image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    transition: 1s;
+}
+
+.card:hover .background .h2 {
+    opacity: 0;
+}
+
+.card:hover .background .image {
+    width: 110%;
+    height: 110%;
+}
+
+.textCtr {
+    width: 80%;
+    padding: 2rem 0;
+    z-index: 1;
+}
+
+.front h2 {
+    font-size: 25px;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #E2F1E7;
+    transition: 0.5s;
+    z-index: 10;
+    line-height: 5px;
+    letter-spacing: 1px;
+}
+
+.front p {
+    padding-top: 5px;
+    font-size: 16px;
+    color: #E2F1E7;
+    letter-spacing: 1px;
+    line-height: 20px;
+}
+
+.front {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    border-radius: 15px;
+    background-color: #A2C1B7;
+    transition: 1s;
+    height: 13%;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    opacity: 0.9;
+}
+
+.card:hover .front {
+    height: 45%;
+}
+
+.card:hover .front h2 {
+    padding-top: 3px;
+}
+
+/* Modal */
+
+.modalRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem 3rem;
+}
+
+.modalRow h2 {
+    color: #243642;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin: 0;
+}
+
+.imageGallery {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+}
